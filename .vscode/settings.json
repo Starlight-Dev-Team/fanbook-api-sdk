@@ -1,0 +1,14 @@
+{
+  "editor.tabSize": 2,
+  "eslint.validate": [
+    "typescript"
+  ],
+  "files.eol": "\n",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.quoteStyle": "single",
+  "eslint.alwaysShowStatus": true,
+  "eslint.run": "onSave",
+  "eslint.options": {
+    "overrideConfigFile": "./.eslintrc.js"
+  }
+}

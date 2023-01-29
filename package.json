@@ -1,0 +1,9 @@
+{
+  "name": "fanbook-api-sdk",
+  "version": "0.1.0",
+  "description": "fanbook OpenAPI SDK",
+  "main": "dist/main.js",
+  "author": "Starlight-Dev-Team",
+  "license": "MIT",
+  "private": false
+}

@@ -2,11 +2,15 @@
  * 通用工具。
  */
 
+import * as _jsonBigint from 'json-bigint';
+
 import axios, {
   AxiosError,
   type AxiosRequestConfig,
   type AxiosResponse,
 } from 'axios';
+
+const jsonBigint = _jsonBigint({ useNativeBigInt: true });
 
 /**
  * fanbook API 调用失败。
@@ -37,6 +41,14 @@ export const apiBaseUrl = 'https://a1.fanbook.mobi';
 export const requester = axios.create({
   baseURL: apiBaseUrl,
   timeout: 5000,
+  transformResponse: [(data) => {
+    try {
+      return jsonBigint.parse(data);
+    } catch (err) {
+      if (Object(err).name === 'SyntaxError') return data; // 非 JSON 响应体
+      throw err;
+    }
+  }],
 });
 
 /**

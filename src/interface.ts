@@ -48,3 +48,85 @@ export interface User {
    */
   pending?: boolean;
 }
+
+export type FormattingOptions = 'Fanbook' | 'MarkdownV2' | undefined;
+
+export interface Message {
+  /**
+   * 消息唯一 ID 。
+   */
+  message_id: bigint;
+  /**
+   * 消息发送者。
+   */
+  from?: User;
+  /**
+   * 消息发送时间。
+   */
+  date: number;
+  /**
+   * 消息所在聊天。
+   */
+  chat: /* unresolved */ unknown;
+  forward_from?: User;
+  forward_from_chat?: /* unresolved */ unknown;
+  forward_from_message_id?: bigint;
+  forward_signature?: string;
+  forward_sender_name?: string;
+  forward_date?: number;
+  /**
+   * 回复某条消息时，表示消息所回复的原始消息。
+   */
+  reply_to_message?: Message;
+  via_bot?: User;
+  edit_date?: number;
+  media_group_id?: number;
+  author_signature?: string;
+  /**
+   * 消息内容。
+   */
+  text?: string;
+  /**
+   * 消息内嵌的实体。
+   */
+  entities?: /* unresolved */ unknown[];
+  animation?: /* unresolved */ unknown;
+  audio?: /* unresolved */ unknown;
+  document?: /* unresolved */ unknown;
+  photo?: /* unresolved */ unknown[];
+  sticker?: /* unresolved */ unknown;
+  video?: /* unresolved */ unknown;
+  video_note?: /* unresolved */ unknown;
+  voice?: /* unresolved */ unknown;
+  /**
+   * 标题。
+   */
+  caption?: string;
+  /**
+   * 标题内嵌的实体。
+   */
+  caption_entities?: /* unresolved */ unknown[];
+  contact?: /* unresolved */ unknown;
+  dice?: /* unresolved */ unknown;
+  game?: /* unresolved */ unknown;
+  poll?: /* unresolved */ unknown;
+  venue?: /* unresolved */ unknown;
+  location?: /* unresolved */ unknown;
+  new_chat_members?: User[];
+  left_chat_member?: User;
+  new_chat_title?: string;
+  new_chat_photo?: /* unresolved */ unknown[];
+  delete_chat_photo?: true;
+  group_chat_created?: true;
+  supergroup_chat_created?: true;
+  channel_chat_created?: true;
+  migrate_to_chat_id?: bigint;
+  migrate_from_chat_id?: bigint;
+  pinned_message?: Message;
+  invoice?: /* unresolved */ unknown;
+  successful_payment?: /* unresolved */ unknown;
+  /**
+   * 内联键盘。
+   */
+  reply_markup?: /* unresolved */ unknown;
+}

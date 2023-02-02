@@ -41,13 +41,26 @@ export const apiBaseUrl = 'https://a1.fanbook.mobi';
 export const requester = axios.create({
   baseURL: apiBaseUrl,
   timeout: 5000,
+  // JSON 请求体
+  transformRequest: [(data, headers) => {
+    try {
+      data = jsonBigint.stringify(data);
+      headers['Content-Type'] = 'application/json'; // 解析成功，设置 Content-Type
+    } catch (err) {
+      // 未知错误
+      if (Object(err).name !== 'SyntaxError') throw err;
+    }
+    return data;
+  }],
+  // JSON 响应体
   transformResponse: [(data) => {
     try {
-      return jsonBigint.parse(data);
+      data = jsonBigint.parse(data);
     } catch (err) {
-      if (Object(err).name === 'SyntaxError') return data; // 非 JSON 响应体
-      throw err;
+      // 未知错误
+      if (Object(err).name !== 'SyntaxError') throw err;
     }
+    return data;
   }],
 });
 

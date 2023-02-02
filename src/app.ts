@@ -4,7 +4,9 @@
 
 import * as qs from 'qs';
 
-import { requester, sendWithoutCheck } from '@/util';
+import { requester, send, sendWithoutCheck } from '@/util';
+import type { Oauth2User } from './interface';
+import type { Profile } from './bot';
 
 /**
  * 会话，包含用户信息及令牌。
@@ -83,6 +85,21 @@ export class App {
       refreshToken: res.refresh_token,
       tokenType: res.token_type,
       expires: new Date(Date.now() + res.expires_in * 1000), // 当前时间加有效时间（秒）
+    };
+  }
+
+  public async getOauth2UserProfile(token: string): Promise<Profile> {
+    const res: Oauth2User = await send(requester.post(
+      '/open/api/user/getMe',
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    ));
+    return {
+      uuid: BigInt(res.user_id),
+      id: Number(res.username),
+      name: res.nickname,
     };
   }
 }

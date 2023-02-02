@@ -130,3 +130,23 @@ export interface Message {
    */
   reply_markup?: /* unresolved */ unknown;
 }
+
+export interface Oauth2User {
+  /**
+   * 用户唯一 ID 。
+   */
+  user_id: string;
+  /**
+   * 用户名称。
+   */
+  nickname: string;
+  /**
+   * Fanbook # 。
+   */
+  username: string;
+  /**
+   * 头像图片地址。
+   */
+  avatar: string;
+  token?: string;
+}

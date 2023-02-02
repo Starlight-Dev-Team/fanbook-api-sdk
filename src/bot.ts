@@ -18,7 +18,7 @@ export interface Profile {
   /**
    * 是否机器人
    */
-  isBot: boolean;
+  isBot?: boolean;
   /**
    * 名称。
    */
@@ -34,7 +34,7 @@ export interface Profile {
   /**
    * 是否未完成入门仪式。
    */
-  isPending: boolean;
+  isPending?: boolean;
 }
 
 export interface SendMessageConfig {

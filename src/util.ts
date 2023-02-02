@@ -43,12 +43,14 @@ export const requester = axios.create({
   timeout: 5000,
   // JSON 请求体
   transformRequest: [(data, headers) => {
-    try {
-      data = jsonBigint.stringify(data);
-      headers['Content-Type'] = 'application/json'; // 解析成功，设置 Content-Type
-    } catch (err) {
-      // 未知错误
-      if (Object(err).name !== 'SyntaxError') throw err;
+    if (headers['Content-Type'] === undefined) { // 未指定 Content-Type
+      try {
+        data = jsonBigint.stringify(data);
+        headers['Content-Type'] = 'application/json'; // 解析成功，设置 Content-Type
+      } catch (err) {
+        // 未知错误
+        if (Object(err).name !== 'SyntaxError') throw err;
+      }
     }
     return data;
   }],
@@ -72,6 +74,7 @@ interface FanbookApiResponse {
   status?: boolean;
   description?: string;
   result?: unknown;
+  data?: unknown;
 }
 /**
  * 等待 API 请求，不进行校验。
@@ -91,18 +94,17 @@ export async function sendWithoutCheck<T, D>(
   }
 }
 /**
- * 等待并校验 fanbook OpenAPI 请求。
+ * 等待并校验 Fanbook OpenAPI 请求。
  * @param request Axios 请求
  */
 export async function send<T extends FanbookApiResponse, D>(
   request: Promise<AxiosResponse<T, D>>,
-): Promise<T['result'] | T> {
+): Promise<T['result'] | T['data']> {
   const response = await sendWithoutCheck(request);
   const httpResponse = await request; // await 一个已经决议的 Promise 会直接返回
   // 请求校验成功，返回业务数据
-  if (response.ok === true || response.status === true) { // 此处严格相等
-    return response.result;
-  }
+  if (response.ok === true) return response.result; // 机器人 API
+  if (response.status === true) return response.data; // OAuth2.0 API
   // 请求校验失败，抛出异常
   throw new FanbookApiError(httpResponse.config, httpResponse);
 }

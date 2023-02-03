@@ -1,5 +1,5 @@
 {
-  "name": "fanbook-api-sdk",
+  "name": "@starlight-dev-team/fanbook-api-sdk",
   "version": "0.1.0",
   "description": "fanbook OpenAPI SDK",
   "main": "dist/main.js",
@@ -8,15 +8,24 @@
   "private": false,
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register ./src/main.ts --files",
-    "build": "rm -rf ./dist && tsc"
+    "build": "rm -rf ./dist && tsc && tsc-alias"
   },
+  "homepage": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Starlight-Dev-Team/fanbook-api-sdk"
+    "url": "git+https://github.com/Starlight-Dev-Team/fanbook-api-sdk.git"
+  },
+  "directories": {
+    "example": "examples"
   },
   "bugs": {
     "url": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk/issues"
   },
+  "keywords": [
+    "fanbook",
+    "typescript",
+    "sdk"
+  ],
   "dependencies": {
     "@types/qs": "^6.9.7",
     "axios": "^1.2.6",

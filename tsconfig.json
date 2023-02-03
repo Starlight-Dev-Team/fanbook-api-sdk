@@ -20,14 +20,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./src/*"
+        "src/*"
       ]
     },
     "rootDir": "./src",
     "outDir": "./dist"
   },
   "include": [
-    "./src/*"
+    "src"
   ],
   "exclude": [
     "node_modules",

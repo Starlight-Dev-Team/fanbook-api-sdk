@@ -1,5 +1,5 @@
 {
-  "name": "fanbook-api-sdk",
+  "name": "@starlight-dev-team/fanbook-api-sdk",
   "version": "0.1.0",
   "description": "fanbook OpenAPI SDK",
   "main": "dist/main.js",
@@ -13,7 +13,10 @@
   "homepage": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Starlight-Dev-Team/fanbook-api-sdk"
+    "url": "git+https://github.com/Starlight-Dev-Team/fanbook-api-sdk.git"
+  },
+  "directories": {
+    "example": "examples"
   },
   "bugs": {
     "url": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk/issues"

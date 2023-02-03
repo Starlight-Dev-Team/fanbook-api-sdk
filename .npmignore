@@ -1,5 +1,5 @@
 .github
 .vscode
+.eslint*
 **/.*
-node_modules
 examples

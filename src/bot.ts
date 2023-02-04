@@ -5,6 +5,7 @@
 import { requester, send } from '@/util';
 
 import type {
+  Chat,
   FormattingOptions,
   Message,
   User,
@@ -140,5 +141,20 @@ export class Bot {
       data,
     ));
     return res.message_id;
+  }
+
+  /**
+   * 获取与用户的私聊。
+   *
+   * 机器人需要与用户有共同服务器。
+   * @param user 用户 ID
+   * @returns 聊天 ID
+   */
+  public async getPrivateChat(user: bigint): Promise<bigint> {
+    const res: Chat = await send(requester.post(
+      `${this.publicPath}/getPrivateChat`,
+      { user_id: user },
+    ));
+    return res.id;
   }
 }

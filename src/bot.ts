@@ -143,6 +143,16 @@ export class Bot {
     return res.message_id;
   }
 
+  public async deleteMessage(chat: bigint, message: bigint): Promise<void> {
+    await send(requester.post(
+      `${this.publicPath}/deleteMessage`,
+      {
+        chat_id: chat,
+        message_id: message,
+      },
+    ));
+  }
+
   /**
    * 获取与用户的私聊。
    *

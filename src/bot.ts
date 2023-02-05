@@ -85,6 +85,17 @@ export interface SendMessageConfig {
   sendTo?: bigint[];
 }
 
+export interface KickUserConfig {
+  /**
+   * 服务器 ID 。
+   */
+  guild?: bigint;
+  /**
+   * 聊天 ID 。
+   */
+  chat?: bigint;
+}
+
 /**
  * 开放平台机器人。
  */
@@ -194,6 +205,22 @@ export class Bot {
         target_uid: String(user),
         target_guild_id: String(guild),
         duration_in_second: duration,
+      },
+    ));
+  }
+
+  /**
+   * 踢出用户。
+   * @param user 用户 ID
+   * @param config 配置操作所在服务器或频道
+   */
+  public async kickUser(user: bigint, config: KickUserConfig): Promise<void> {
+    await send(requester.post(
+      `${this.publicPath}/kickChatMember`,
+      {
+        user_id: user,
+        chat_id: config.chat,
+        guild_id: config.guild,
       },
     ));
   }

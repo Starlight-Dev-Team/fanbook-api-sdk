@@ -16,4 +16,4 @@ jobs:
           yarn add -D @typescript-eslint/eslint-plugin
       - name: 运行测试命令
         run: |
-          eslint src
+          yarn test

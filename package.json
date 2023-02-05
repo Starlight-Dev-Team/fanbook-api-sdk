@@ -8,6 +8,7 @@
   "private": false,
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register ./src/main.ts --files",
+    "test": "eslint src",
     "build": "rm -rf ./dist && tsc && tsc-alias"
   },
   "homepage": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk",

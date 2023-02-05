@@ -143,6 +143,15 @@ export class Bot {
     return res.message_id;
   }
 
+  /**
+   * 撤回消息。
+   *
+   * 机器人发送消息后，可在一定内撤回。
+   *
+   * 机器人有**对应频道**的“管理消息”权限时，可以撤回**任意消息**（特殊声明除外）。
+   * @param chat 聊天 ID
+   * @param message 消息 ID
+   */
   public async deleteMessage(chat: bigint, message: bigint): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/deleteMessage`,

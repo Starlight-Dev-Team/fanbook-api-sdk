@@ -176,4 +176,25 @@ export class Bot {
     ));
     return res.id;
   }
+
+  /**
+   * 禁言用户。
+   * @param guild 目标服务器 ID
+   * @param user 目标用户 ID
+   * @param duration 禁言时长（单位：秒）
+   */
+  public async banUserSpeaking(
+    guild: bigint,
+    user: bigint,
+    duration: number,
+  ): Promise<void> {
+    await send(requester.post(
+      `${this.publicPath}/forbidUserSpeaking`,
+      {
+        target_uid: String(user),
+        target_guild_id: String(guild),
+        duration_in_second: duration,
+      },
+    ));
+  }
 }

@@ -10,10 +10,36 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: 获取缓存
+        uses: actions/cache@v3
+        with:
+          key: node_modules
+          path: node_modules
       - name: 安装依赖
         run: |
           npm install -g eslint
-          yarn add -D @typescript-eslint/eslint-plugin
+          yarn
       - name: 运行测试命令
         run: |
-          eslint src
+          yarn test
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v3
+      - name: 初始化 Node.js 环境
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: 获取缓存
+        uses: actions/cache@v3
+        with:
+          key: node_modules
+          path: node_modules
+      - name: 安装依赖
+        run: |
+          npm install -g tsc tsc-alias
+          yarn
+      - name: 运行测试命令
+        run: |
+          yarn build

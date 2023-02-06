@@ -22,6 +22,7 @@ module.exports = {
       'multiline': { 'delimiter': 'semi', 'requireLast': true },
       'singleline': { 'delimiter': 'semi', 'requireLast': true },
     }],
+    '@typescript-eslint/naming-convention': [0],
     '@typescript-eslint/no-debugger': production ? [2] : [0],
     '@typescript-eslint/no-floating-promises': [0],
     '@typescript-eslint/quotes': [2, 'single'],

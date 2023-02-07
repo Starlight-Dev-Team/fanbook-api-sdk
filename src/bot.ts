@@ -267,4 +267,28 @@ export class Bot {
     }
     return res2;
   }
+
+  /**
+   * 设置指定服务器成员的角色。
+   * @param guild 服务器 ID
+   * @param user 用户 ID
+   * @param roles 角色 ID 数组
+   * @param operation 是给用户添加（`add`）还是移除（`del`）角色，默认 `add`
+   */
+  public async setGuildUserRoles(
+    guild: bigint,
+    user: bigint,
+    roles: bigint[],
+    operation: 'add' | 'del' = 'add',
+  ): Promise<void> {
+    await send(requester.post(
+      `${this.publicPath}/v2/setMemberRoles`,
+      {
+        guild_id: guild,
+        user_id: user,
+        roles,
+        operation,
+      },
+    ));
+  }
 }

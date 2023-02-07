@@ -253,7 +253,7 @@ export class Bot {
    */
   public async getGuildRoles(guild: bigint): Promise<GuildRole[]> {
     const res: fb.GuildRole[] = await send(requester.post(
-      `${this.publicPath}`,
+      `${this.publicPath}/getGuildRoles`,
       {
         guild_id: guild,
       },

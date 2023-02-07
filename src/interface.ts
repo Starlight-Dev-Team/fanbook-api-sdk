@@ -7,5 +7,7 @@
 export * from './interface/user';
 export * from './interface/chat';
 export * from './interface/message';
+export * from './interface/guild-role';
+export * from './interface/permissions';
 
 export * from './interface/oauth2/user';

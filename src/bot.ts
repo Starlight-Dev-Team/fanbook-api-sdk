@@ -4,12 +4,7 @@
 
 import { requester, send } from '@/util';
 
-import type {
-  Chat,
-  FormattingOptions,
-  Message,
-  User,
-} from './interface';
+import type * as fb from './interface';
 
 export interface Profile {
   /**
@@ -38,6 +33,33 @@ export interface Profile {
   isPending?: boolean;
 }
 
+export interface GuildRole {
+  /**
+   * 角色 ID 。
+   */
+  id: bigint;
+  /**
+   * 角色名称。
+   */
+  name: string;
+  /**
+   * 角色优先级。
+   */
+  position: number;
+  /**
+   * 角色权限。
+   */
+  permissions: fb.Permissions;
+  /**
+   * 角色昵称颜色。
+   */
+  color: number;
+  /**
+   * 成员数量。
+   */
+  memberCount?: number;
+}
+
 export interface SendMessageConfig {
   /**
    * 目标聊天。
@@ -52,7 +74,7 @@ export interface SendMessageConfig {
    *
    * 纯文本消息本项不填，否则填 `Fanbook` 。
    */
-  parseMode?: FormattingOptions;
+  parseMode?: fb.FormattingOptions;
   /**
    * 是否仅发送者和@到的人可见。
    */
@@ -116,7 +138,7 @@ export class Bot {
    * 获取机器人信息。
    */
   public async getProfile(): Promise<Profile> {
-    const res: User = await send(requester.post(`${this.publicPath}/getMe`));
+    const res: fb.User = await send(requester.post(`${this.publicPath}/getMe`));
     const username = Number(res.username);
     return {
       uuid: res.id,
@@ -147,7 +169,7 @@ export class Bot {
       // 否则，此项默认为 `['all']`
       users: config.isEphemeral ? (config.sendTo ?? ['all']) : undefined,
     };
-    const res: Message = await send(requester.post(
+    const res: fb.Message = await send(requester.post(
       `${this.publicPath}/sendMessage`,
       data,
     ));
@@ -181,7 +203,7 @@ export class Bot {
    * @returns 聊天 ID
    */
   public async getPrivateChat(user: bigint): Promise<bigint> {
-    const res: Chat = await send(requester.post(
+    const res: fb.Chat = await send(requester.post(
       `${this.publicPath}/getPrivateChat`,
       { user_id: user },
     ));
@@ -223,5 +245,26 @@ export class Bot {
         guild_id: config.guild,
       },
     ));
+  }
+
+  /**
+   * 获取服务器角色列表。
+   * @param guild 服务器 ID
+   */
+  public async getGuildRoles(guild: bigint): Promise<GuildRole[]> {
+    const res: fb.GuildRole[] = await send(requester.post(
+      `${this.publicPath}/getGuildRoles`,
+      {
+        guild_id: guild,
+      },
+    ));
+    // 原样返回 `id` `name` `position` `permissions` `color` ，并修改 `member_count` 键名
+    const res2: GuildRole[] = [];
+    for (const { id, name, position, permissions, color, member_count } of res) {
+      res2.push({
+        id, name, position, permissions, color, memberCount: member_count,
+      });
+    }
+    return res2;
   }
 }

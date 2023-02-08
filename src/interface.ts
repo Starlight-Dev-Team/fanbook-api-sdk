@@ -9,5 +9,6 @@ export * from './interface/chat';
 export * from './interface/message';
 export * from './interface/guild-role';
 export * from './interface/permissions';
+export * from './interface/guild-credit';
 
 export * from './interface/oauth2/user';

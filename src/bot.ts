@@ -60,6 +60,54 @@ export interface GuildRole {
   memberCount?: number;
 }
 
+export interface GuildCreditSlot {
+  /**
+   * 卡槽项描述。
+   */
+  value: string;
+  /**
+   * 卡槽项为文字时，值的灰色前缀。
+   */
+  label?: string;
+  /**
+   * 卡槽项为图片时，图片的地址。
+   */
+  image?: string;
+}
+
+export interface GuildCredit {
+  /**
+   * 卡槽自定义 ID 。
+   */
+  id: string;
+  /**
+   * 卡槽颁发者数据。
+   */
+  authority: {
+    /**
+     * 颁发者图片地址。
+     */
+    icon: string;
+    /**
+     * 颁发者文字标题。
+     */
+    name: string;
+  };
+  /**
+   * 显示在昵称前的组件数据。
+   */
+  title: {
+    /**
+     * 显示在昵称前的图片地址。
+     */
+    icon: string;
+  };
+  /**
+   * 卡槽插槽。
+   */
+  slots: GuildCreditSlot[][];
+}
+
 export interface SendMessageConfig {
   /**
    * 目标聊天。
@@ -290,5 +338,64 @@ export class Bot {
         operation,
       },
     ));
+  }
+
+  /**
+   * 获取成员荣誉卡槽数据。
+   */
+  public async getGuildUserCredit(
+    guild: bigint,
+    user: bigint,
+  ): Promise<GuildCredit[]> {
+    const res: [{
+      user_id: string;
+      credits: Record<string, {
+        bot_id: bigint;
+        card_id: string;
+        content: string;
+        title: fb.CreditTitle;
+        v: number;
+        visible: boolean;
+        index: number;
+      }>;
+    }] = await send(requester.post(
+      `${this.publicPath}/getGuildCredit`,
+      {
+        guild_id: guild,
+        user_id: user,
+      },
+    ));
+    const res2: GuildCredit[] = [];
+    // 遍历卡槽数组
+    for (const id of Object.keys(res[0].credits)) {
+      const item = res[0].credits[id];
+      const content: fb.GuildCredit = JSON.parse(item.content);
+      // 修改每个插槽的 `img` 键为 `image`
+      const slots: GuildCreditSlot[][] = [];
+      for (const arr of content.slots) {
+        const slot: GuildCreditSlot[] = [];
+        for (const { value, label, img, badge } of arr) {
+          slot.push({
+            value,
+            label,
+            image: img ?? badge,
+          });
+        }
+        slots.push(slot);
+      }
+      // 处理完成，加入返回值数组
+      res2.push({
+        id,
+        authority: {
+          icon: content.authority.icon,
+          name: content.authority.name,
+        },
+        title: {
+          icon: content.title.img,
+        },
+        slots,
+      });
+    }
+    return res2;
   }
 }

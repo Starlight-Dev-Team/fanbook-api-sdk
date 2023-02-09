@@ -1,3 +1,5 @@
+import type { Permissions } from '@/interface';
+
 /**
  * 成员角色。
  */
@@ -17,7 +19,7 @@ export interface GuildRole {
   /**
    * 角色权限。
    */
-  permissions: fb.Permissions;
+  permissions: Permissions;
   /**
    * 角色昵称颜色。
    */

@@ -3,6 +3,7 @@
  */
 
 import { requester, send } from '@/util';
+import * as transform from '@/transform';
 
 import type * as native from '@/interface';
 import type * as types from '@/types';
@@ -85,16 +86,9 @@ export class Bot {
    * 获取机器人信息。
    */
   public async getProfile(): Promise<types.Profile> {
-    const res: native.User = await send(requester.post(`${this.publicPath}/getMe`));
-    const username = Number(res.username);
-    return {
-      uuid: res.id,
-      isBot: res.is_bot,
-      name: res.first_name,
-      id: Number.isNaN(username) ? undefined : username, // 机器人 username 是字符串
-      privacyMode: res.can_read_all_group_messages,
-      isPending: false, // 机器人不需要入门仪式
-    };
+    return transform.user(await send(requester.post(
+      `${this.publicPath}/getMe`,
+    )));
   }
 
   /**
@@ -205,12 +199,9 @@ export class Bot {
         guild_id: guild,
       },
     ));
-    // 原样返回 `id` `name` `position` `permissions` `color` ，并修改 `member_count` 键名
     const res2: types.GuildRole[] = [];
-    for (const { id, name, position, permissions, color, member_count } of res) {
-      res2.push({
-        id, name, position, permissions, color, memberCount: member_count,
-      });
+    for (const item of res) {
+      res2.push(transform.role(item));
     }
     return res2;
   }
@@ -246,55 +237,12 @@ export class Bot {
     guild: bigint,
     user: bigint,
   ): Promise<types.GuildCredit[]> {
-    const res: [{
-      user_id: string;
-      credits: Record<string, {
-        bot_id: bigint;
-        card_id: string;
-        content: string;
-        title: native.CreditTitle;
-        v: number;
-        visible: boolean;
-        index: number;
-      }>;
-    }] = await send(requester.post(
+    return transform.guildCredit(await send(requester.post(
       `${this.publicPath}/getGuildCredit`,
       {
         guild_id: guild,
         user_id: user,
       },
-    ));
-    const res2: types.GuildCredit[] = [];
-    // 遍历卡槽数组
-    for (const id of Object.keys(res[0].credits)) {
-      const item = res[0].credits[id];
-      const content: native.GuildCredit = JSON.parse(item.content);
-      // 修改每个插槽的 `img` 键为 `image`
-      const slots: types.GuildCreditSlot[][] = [];
-      for (const arr of content.slots) {
-        const slot: types.GuildCreditSlot[] = [];
-        for (const { value, label, img, badge } of arr) {
-          slot.push({
-            value,
-            label,
-            image: img ?? badge,
-          });
-        }
-        slots.push(slot);
-      }
-      // 处理完成，加入返回值数组
-      res2.push({
-        id,
-        authority: {
-          icon: content.authority.icon,
-          name: content.authority.name,
-        },
-        title: {
-          icon: content.title.img,
-        },
-        slots,
-      });
-    }
-    return res2;
+    )));
   }
 }

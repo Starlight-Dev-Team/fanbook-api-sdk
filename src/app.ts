@@ -5,30 +5,10 @@
 import * as qs from 'qs';
 
 import { requester, send, sendWithoutCheck } from '@/util';
-import type { Oauth2User } from './interface';
-import type { Profile } from './bot';
+import * as transform from '@/transform';
 
-/**
- * 会话，包含用户信息及令牌。
- */
-export interface Session {
-  /**
-   * OAuth2.0 流程，访问令牌。
-   */
-  accessToken: string;
-  /**
-   * OAuth2.0 流程，刷新令牌。
-   */
-  refreshToken: string;
-  /**
-   * 令牌类型。
-   */
-  tokenType: 'bearer';
-  /**
-   * OAuth2.0 流程，令牌失效时间。
-   */
-  expires: Date;
-};
+import type * as types from '@/types';
+import type { Oauth2User } from '@/interface';
 
 /**
  * 开放平台应用。
@@ -59,7 +39,7 @@ export class App {
    * @param code OAuth2.0 流程中的 code
    * @see https://open.fanbook.mobi/document/manage/doc/Oauth2.0%20API/#%E6%8D%A2%E5%8F%91-token
    */
-  public async codeToSession(code: string): Promise<Session> {
+  public async codeToSession(code: string): Promise<types.Session> {
     const data = qs.stringify({
       grant_type: 'authorization_code',
       code,
@@ -69,26 +49,19 @@ export class App {
       username: this.clientId,
       password: this.clientSecret,
     };
-    const res: {
-      access_token: string;
-      refresh_token: string;
-      token_type: 'bearer';
-      expires_in: number;
-    } = await sendWithoutCheck(requester.post('/open/oauth2/token', data, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded', // 必须加上，否则会报错
+    return transform.session(await sendWithoutCheck(requester.post(
+      '/open/oauth2/token',
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded', // 必须加上，否则会报错
+        },
+        auth,
       },
-      auth,
-    })); // 此接口格式不同，不需要进行校验
-    return {
-      accessToken: res.access_token,
-      refreshToken: res.refresh_token,
-      tokenType: res.token_type,
-      expires: new Date(Date.now() + res.expires_in * 1000), // 当前时间加有效时间（秒）
-    };
+    ))); // 此接口格式不同，不需要进行校验
   }
 
-  public async getOauth2UserProfile(token: string): Promise<Profile> {
+  public async getOauth2UserProfile(token: string): Promise<types.Profile> {
     const res: Oauth2User = await send(requester.post(
       '/open/api/user/getMe',
       {},

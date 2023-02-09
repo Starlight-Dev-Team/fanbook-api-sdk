@@ -5,30 +5,11 @@
 import * as qs from 'qs';
 
 import { requester, send, sendWithoutCheck } from '@/util';
-import type { Oauth2User } from './interface';
-import type { Profile } from './bot';
-
-/**
- * 会话，包含用户信息及令牌。
- */
-export interface Session {
-  /**
-   * OAuth2.0 流程，访问令牌。
-   */
-  accessToken: string;
-  /**
-   * OAuth2.0 流程，刷新令牌。
-   */
-  refreshToken: string;
-  /**
-   * 令牌类型。
-   */
-  tokenType: 'bearer';
-  /**
-   * OAuth2.0 流程，令牌失效时间。
-   */
-  expires: Date;
-};
+import type {
+  Session,
+  Profile,
+} from '@/types';
+import type { Oauth2User } from '@/interface';
 
 /**
  * 开放平台应用。

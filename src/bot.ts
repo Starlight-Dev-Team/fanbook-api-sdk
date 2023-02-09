@@ -4,109 +4,8 @@
 
 import { requester, send } from '@/util';
 
-import type * as fb from './interface';
-
-export interface Profile {
-  /**
-   * 唯一 ID 。
-   */
-  uuid: bigint;
-  /**
-   * 是否机器人
-   */
-  isBot?: boolean;
-  /**
-   * 名称。
-   */
-  name: string;
-  /**
-   * Fanbook # 。
-   */
-  id?: number;
-  /**
-   * privacy mode 是否开启。
-   */
-  privacyMode?: boolean;
-  /**
-   * 是否未完成入门仪式。
-   */
-  isPending?: boolean;
-}
-
-export interface GuildRole {
-  /**
-   * 角色 ID 。
-   */
-  id: bigint;
-  /**
-   * 角色名称。
-   */
-  name: string;
-  /**
-   * 角色优先级。
-   */
-  position: number;
-  /**
-   * 角色权限。
-   */
-  permissions: fb.Permissions;
-  /**
-   * 角色昵称颜色。
-   */
-  color: number;
-  /**
-   * 成员数量。
-   */
-  memberCount?: number;
-}
-
-export interface GuildCreditSlot {
-  /**
-   * 卡槽项描述。
-   */
-  value: string;
-  /**
-   * 卡槽项为文字时，值的灰色前缀。
-   */
-  label?: string;
-  /**
-   * 卡槽项为图片时，图片的地址。
-   */
-  image?: string;
-}
-
-export interface GuildCredit {
-  /**
-   * 卡槽自定义 ID 。
-   */
-  id: string;
-  /**
-   * 卡槽颁发者数据。
-   */
-  authority: {
-    /**
-     * 颁发者图片地址。
-     */
-    icon: string;
-    /**
-     * 颁发者文字标题。
-     */
-    name: string;
-  };
-  /**
-   * 显示在昵称前的组件数据。
-   */
-  title: {
-    /**
-     * 显示在昵称前的图片地址。
-     */
-    icon: string;
-  };
-  /**
-   * 卡槽插槽。
-   */
-  slots: GuildCreditSlot[][];
-}
+import type * as native from '@/interface';
+import type * as types from '@/types';
 
 export interface SendMessageConfig {
   /**
@@ -122,7 +21,7 @@ export interface SendMessageConfig {
    *
    * 纯文本消息本项不填，否则填 `Fanbook` 。
    */
-  parseMode?: fb.FormattingOptions;
+  parseMode?: native.FormattingOptions;
   /**
    * 是否仅发送者和@到的人可见。
    */
@@ -185,8 +84,8 @@ export class Bot {
   /**
    * 获取机器人信息。
    */
-  public async getProfile(): Promise<Profile> {
-    const res: fb.User = await send(requester.post(`${this.publicPath}/getMe`));
+  public async getProfile(): Promise<types.Profile> {
+    const res: native.User = await send(requester.post(`${this.publicPath}/getMe`));
     const username = Number(res.username);
     return {
       uuid: res.id,
@@ -217,7 +116,7 @@ export class Bot {
       // 否则，此项默认为 `['all']`
       users: config.isEphemeral ? (config.sendTo ?? ['all']) : undefined,
     };
-    const res: fb.Message = await send(requester.post(
+    const res: native.Message = await send(requester.post(
       `${this.publicPath}/sendMessage`,
       data,
     ));
@@ -251,7 +150,7 @@ export class Bot {
    * @returns 聊天 ID
    */
   public async getPrivateChat(user: bigint): Promise<bigint> {
-    const res: fb.Chat = await send(requester.post(
+    const res: native.Chat = await send(requester.post(
       `${this.publicPath}/getPrivateChat`,
       { user_id: user },
     ));
@@ -299,15 +198,15 @@ export class Bot {
    * 获取服务器角色列表。
    * @param guild 服务器 ID
    */
-  public async getGuildRoles(guild: bigint): Promise<GuildRole[]> {
-    const res: fb.GuildRole[] = await send(requester.post(
+  public async getGuildRoles(guild: bigint): Promise<types.GuildRole[]> {
+    const res: native.GuildRole[] = await send(requester.post(
       `${this.publicPath}/getGuildRoles`,
       {
         guild_id: guild,
       },
     ));
     // 原样返回 `id` `name` `position` `permissions` `color` ，并修改 `member_count` 键名
-    const res2: GuildRole[] = [];
+    const res2: types.GuildRole[] = [];
     for (const { id, name, position, permissions, color, member_count } of res) {
       res2.push({
         id, name, position, permissions, color, memberCount: member_count,
@@ -346,14 +245,14 @@ export class Bot {
   public async getGuildUserCredit(
     guild: bigint,
     user: bigint,
-  ): Promise<GuildCredit[]> {
+  ): Promise<types.GuildCredit[]> {
     const res: [{
       user_id: string;
       credits: Record<string, {
         bot_id: bigint;
         card_id: string;
         content: string;
-        title: fb.CreditTitle;
+        title: native.CreditTitle;
         v: number;
         visible: boolean;
         index: number;
@@ -365,15 +264,15 @@ export class Bot {
         user_id: user,
       },
     ));
-    const res2: GuildCredit[] = [];
+    const res2: types.GuildCredit[] = [];
     // 遍历卡槽数组
     for (const id of Object.keys(res[0].credits)) {
       const item = res[0].credits[id];
-      const content: fb.GuildCredit = JSON.parse(item.content);
+      const content: native.GuildCredit = JSON.parse(item.content);
       // 修改每个插槽的 `img` 键为 `image`
-      const slots: GuildCreditSlot[][] = [];
+      const slots: types.GuildCreditSlot[][] = [];
       for (const arr of content.slots) {
-        const slot: GuildCreditSlot[] = [];
+        const slot: types.GuildCreditSlot[] = [];
         for (const { value, label, img, badge } of arr) {
           slot.push({
             value,

@@ -1,5 +1,11 @@
 # 更新日志
 
+## 0.2.1
+
+### 问题修复
+
+- 修复“无法获取用户头像”的问题。([#32](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/32))
+
 ## 0.2.0
 
 ### 新功能

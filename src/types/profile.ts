@@ -11,6 +11,10 @@ export interface Profile {
    */
   isBot?: boolean;
   /**
+   * 头像地址。
+   */
+  avatar?: string;
+  /**
    * 用户昵称。
    */
   name: string;

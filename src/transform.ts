@@ -25,9 +25,11 @@ export function session(native: NativeSession): types.Session {
 
 export function user(native: native.User): types.Profile {
   const username = Number(native.username);
+  const hasAvatar = Reflect.has(native, 'avatar');
   return {
     uuid: native.id,
     isBot: native.is_bot,
+    avatar: hasAvatar ? Reflect.get(native, 'avatar') : undefined,
     name: native.first_name,
     id: Number.isNaN(username) ? undefined : username, // 机器人 username 是字符串
     privacyMode: native.can_read_all_group_messages,

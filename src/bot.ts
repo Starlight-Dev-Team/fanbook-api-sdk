@@ -157,6 +157,22 @@ export class Bot {
   }
 
   /**
+   * 通过 Fanbook # 获取用户 ID 。
+   * @param id Fanbook #
+   * @returns 用户 ID
+   */
+  public async getUserByShortId(guild: bigint, id: number): Promise<bigint> {
+    const res: Array<{
+      user: native.User;
+      status: 'member';
+    }> = await send(requester.post(
+      `${this.publicPath}/searchGuildMemberByName`,
+      { guild_id: guild, username: [String(id)] },
+    ));
+    return transform.user(res[0].user).uuid;
+  }
+
+  /**
    * 获取与用户的私聊。
    *
    * 机器人需要与用户有共同服务器。

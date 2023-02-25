@@ -6,6 +6,7 @@
 
 export * from './interface/user';
 export * from './interface/chat';
+export * from './interface/channel';
 export * from './interface/message';
 export * from './interface/guild-role';
 export * from './interface/permissions';

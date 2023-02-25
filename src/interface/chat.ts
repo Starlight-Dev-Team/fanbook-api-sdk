@@ -1,9 +1,5 @@
+import type { ChannelType } from './channel';
 import type { Message } from './message';
-
-/**
- * 聊天类型。
- */
-export type ChatType = 'private' | 'channel' | 'group' | 'supergroup';
 
 /**
  * 聊天对象。
@@ -16,7 +12,7 @@ export interface Chat {
   /**
    * 聊天类型。
    */
-  type: ChatType;
+  type: ChannelType;
   /**
    * 聊天标题。
    */

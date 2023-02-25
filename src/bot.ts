@@ -137,6 +137,26 @@ export class Bot {
   }
 
   /**
+   * 获取服务器中的频道列表。
+   * @param guild 服务器 ID
+   * @returns 频道 ID
+   */
+  public async getGuildChannels(guild: bigint): Promise<types.Chat[]> {
+    const res: native.Channel[] = await send(requester.post(
+      `${this.publicPath}/channel/list`,
+      {
+        user_id: String((await this.getProfile()).uuid),
+        guild_id: String(guild),
+      },
+    ));
+    const res2: types.Chat[] = [];
+    for (const item of res) {
+      res2.push(transform.channel(item));
+    }
+    return res2;
+  }
+
+  /**
    * 获取与用户的私聊。
    *
    * 机器人需要与用户有共同服务器。

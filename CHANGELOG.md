@@ -1,10 +1,17 @@
 # 更新日志
 
+## 0.3.0
+
+### 新功能
+
+- 添加([#32](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/37))
+
 ## 0.2.1
 
 ### 问题修复
 
-- 修复“无法获取用户头像”的问题。([#32](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/32))
+- 添加“Fanbook # 转换为 user id”方法、示例。([#37](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/37))
+- 添加“获取服务器频道列表”方法、示例。([#36](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/36))
 
 ## 0.2.0
 

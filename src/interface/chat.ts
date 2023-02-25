@@ -1,5 +1,4 @@
-import type { ChatType } from '@/types';
-
+import type { ChannelType } from './channel';
 import type { Message } from './message';
 
 /**
@@ -13,7 +12,7 @@ export interface Chat {
   /**
    * 聊天类型。
    */
-  type: ChatType;
+  type: ChannelType;
   /**
    * 聊天标题。
    */

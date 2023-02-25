@@ -1,5 +1,11 @@
 # 更新日志
 
+## 0.3.1
+
+### 性能优化
+
+- 源码安装后本地构建，减少网络利用率。([#39](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/39))
+
 ## 0.3.0
 
 ### 新功能

@@ -11,6 +11,7 @@
     "dev": "ts-node -r tsconfig-paths/register ./src/main.ts --files",
     "test": "eslint src",
     "build": "rm -rf ./dist && tsc && tsc-alias",
+    "preinstall": "npm install -g tsc tsc-alias",
     "postinstall": "npm run build"
   },
   "homepage": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk",

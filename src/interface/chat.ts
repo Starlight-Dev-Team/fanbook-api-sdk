@@ -1,9 +1,6 @@
-import type { Message } from './message';
+import type { ChatType } from '@/types';
 
-/**
- * 聊天类型。
- */
-export type ChatType = 'private' | 'channel' | 'group' | 'supergroup';
+import type { Message } from './message';
 
 /**
  * 聊天对象。

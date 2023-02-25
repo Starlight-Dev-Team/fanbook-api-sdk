@@ -49,6 +49,14 @@ export function role(native: native.GuildRole): types.GuildRole {
   };
 }
 
+export function channel(native: native.Channel): types.Chat {
+  return {
+    uuid: BigInt(native.channel_id),
+    type: native.type,
+    title: native.name,
+  };
+}
+
 export type NativeGuildCredit = [{
   user_id: string;
   credits: Record<string, {

@@ -1,5 +1,9 @@
 # 更新日志
 
+## 0.4.0
+
+- 添加“分页获取频道成员列表”方法。([#41](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/41))
+
 ## 0.3.1
 
 ### 性能优化

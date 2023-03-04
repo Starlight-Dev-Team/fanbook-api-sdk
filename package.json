@@ -8,7 +8,7 @@
   "private": false,
   "scripts": {
     "dev": "sh ./scripts/dev.sh",
-    "lintt": "sh ./scripts/lint.sh",
+    "lint": "sh ./scripts/lint.sh",
     "build": "sh ./scripts/build.sh",
     "preinstall": "sh ./scripts/pre-install.sh",
     "postinstall": "sh ./scripts/post-install.sh"

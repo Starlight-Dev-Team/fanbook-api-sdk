@@ -1,5 +1,11 @@
 # 更新日志
 
+## 0.4.1
+
+### 问题修复
+
+- 修复安装后不构建的问题。([#43](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/43))
+
 ## 0.4.0
 
 ### 新功能

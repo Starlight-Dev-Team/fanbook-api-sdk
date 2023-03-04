@@ -157,6 +157,58 @@ export class Bot {
   }
 
   /**
+   * 分页获取频道成员。
+   * @param guild 服务器 ID
+   * @param channel 频道 ID
+   * @param range 分页数据
+   * @returns 获取到的频道成员
+   */
+  public async getChannelMembers(
+    guild: bigint,
+    channel: bigint,
+    range: native.Range,
+  ): Promise<bigint[]> {
+    const user = (await this.getProfile()).uuid;
+    const res: {
+      ops: Array<{
+        range: [number, number];
+        op: 'SYNC';
+        items: Array<{
+          Group?: {
+            id: string;
+            name: string;
+            count: number;
+          };
+          User?: {
+            user_id: string;
+            username: string;
+            avatar: string;
+            roles: Array<{
+              id: string;
+              name: string;
+            }>;
+          };
+        }>;
+      }>;
+    } = await send(requester.post(
+      `${this.publicPath}/v2/guild/members`,
+      {
+        guild_id: String(guild),
+        channel_id: String(channel),
+        user_id: String(user),
+        ranges: [range],
+      },
+    ));
+    const result: bigint[] = [];
+    for (const item of res.ops[0].items) {
+      if (item.User) {
+        result.push(BigInt(item.User.user_id));
+      }
+    }
+    return result;
+  }
+
+  /**
    * 通过 Fanbook # 获取用户 ID 。
    * @param id Fanbook #
    * @returns 用户 ID

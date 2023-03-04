@@ -7,11 +7,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "./scripts/dev.sh",
-    "lint": "./scripts/lint.sh",
-    "build": "./scripts/build.sh",
-    "preinstall": "./scripts/pre-install.sh",
-    "postinstall": "./scripts/post-install.sh"
+    "dev": "sh ./scripts/dev.sh",
+    "lintt": "sh ./scripts/lint.sh",
+    "build": "sh ./scripts/build.sh",
+    "preinstall": "sh ./scripts/pre-install.sh",
+    "postinstall": "sh ./scripts/post-install.sh"
   },
   "homepage": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk",
   "repository": {

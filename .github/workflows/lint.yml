@@ -15,13 +15,9 @@ jobs:
         with:
           key: node_modules
           path: node_modules
-      - name: 安装依赖
-        run: |
-          npm install -g eslint
-          yarn
       - name: 运行测试命令
         run: |
-          yarn test
+          yarn lint
   Build:
     runs-on: ubuntu-latest
     steps:
@@ -36,10 +32,6 @@ jobs:
         with:
           key: node_modules
           path: node_modules
-      - name: 安装依赖
-        run: |
-          npm install -g tsc tsc-alias
-          yarn
-      - name: 运行测试命令
+      - name: 运行构建命令
         run: |
           yarn build

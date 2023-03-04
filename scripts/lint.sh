@@ -1,3 +1,3 @@
-echo 1;
 npm install -g eslint;
+yarn;
 eslint ./src;

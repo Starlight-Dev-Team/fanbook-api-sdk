@@ -7,12 +7,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "init": "npm i -g yarn ts-node eslint tsc-alias && yarn",
-    "dev": "ts-node -r tsconfig-paths/register ./src/main.ts --files",
-    "test": "eslint src",
-    "build": "rm -rf ./dist && tsc && tsc-alias",
-    "preinstall": "npm install -g tsc tsc-alias",
-    "postinstall": "npm run build"
+    "dev": "./scripts/dev.sh",
+    "lint": "./scripts/lint.sh",
+    "build": "./scripts/build.sh",
+    "preinstall": "./scripts/pre-install.sh",
+    "postinstall": "./scripts/post-install.sh"
   },
   "homepage": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk",
   "repository": {

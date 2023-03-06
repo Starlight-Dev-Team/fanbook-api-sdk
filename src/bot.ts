@@ -54,7 +54,12 @@ export interface SendMessageConfig {
    */
   target?: bigint[];
 }
-
+export interface DeleteMessageConfig {
+  /** 消息所在聊天。 */
+  chat: bigint;
+  /** 消息 ID 。 */
+  message: bigint;
+}
 export interface KickUserConfig {
   /**
    * 服务器 ID 。
@@ -93,7 +98,6 @@ export class Bot {
 
   /**
    * 发送消息。
-   * @param chat 配置项
    * @returns 消息 ID
    */
   public async sendMessage({
@@ -132,10 +136,11 @@ export class Bot {
    * 机器人发送消息后，可在一定内撤回。
    *
    * 机器人有**对应频道**的“管理消息”权限时，可以撤回**任意消息**（特殊声明除外）。
-   * @param chat 聊天 ID
-   * @param message 消息 ID
    */
-  public async deleteMessage(chat: bigint, message: bigint): Promise<void> {
+  public async deleteMessage({
+    chat,
+    message,
+  }: DeleteMessageConfig): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/deleteMessage`,
       {

@@ -120,6 +120,12 @@ export interface SetGuildUserRolesConfig {
   /** 操作类型，添加或删除。 */
   operation: 'add' | 'del';
 }
+export interface GetGuildUserCreditConfig {
+  /** 服务器 ID 。 */
+  guild: bigint;
+  /** 用户 ID 。 */
+  user: bigint;
+}
 
 /**
  * 开放平台机器人。
@@ -387,10 +393,10 @@ export class Bot {
   /**
    * 获取成员荣誉卡槽数据。
    */
-  public async getGuildUserCredit(
-    guild: bigint,
-    user: bigint,
-  ): Promise<types.GuildCredit[]> {
+  public async getGuildUserCredit({
+    guild,
+    user,
+  }: GetGuildUserCreditConfig): Promise<types.GuildCredit[]> {
     return transform.guildCredit(await send(requester.post(
       `${this.publicPath}/getGuildCredit`,
       {

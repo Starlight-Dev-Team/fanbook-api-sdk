@@ -106,6 +106,10 @@ export interface KickUserConfig {
   /** 目标用户。 */
   user: bigint;
 }
+export interface GetGuildRolesConfig {
+  /** 服务器 ID 。 */
+  guild: bigint;
+}
 
 /**
  * 开放平台机器人。
@@ -333,9 +337,10 @@ export class Bot {
 
   /**
    * 获取服务器角色列表。
-   * @param guild 服务器 ID
    */
-  public async getGuildRoles(guild: bigint): Promise<types.GuildRole[]> {
+  public async getGuildRoles({
+    guild,
+  }: GetGuildRolesConfig): Promise<types.GuildRole[]> {
     const res: native.GuildRole[] = await send(requester.post(
       `${this.publicPath}/getGuildRoles`,
       {

@@ -4,6 +4,7 @@
 
 import { requester, send } from '@/util';
 import * as transform from '@/transform';
+import * as analysis from '@/analysis';
 
 import type * as native from '@/interface';
 import type * as types from '@/types';
@@ -125,6 +126,24 @@ export interface GetGuildUserCreditConfig {
   guild: bigint;
   /** 用户 ID 。 */
   user: bigint;
+}
+export interface SetGuildUserCreditConfig {
+  /**
+   * 服务器 ID 。
+   *
+   * `chat` 为空时必填。
+   */
+  guild?: bigint;
+  /**
+   * 聊天 ID 。
+   *
+   * `guild` 为空时必填。
+   */
+  chat?: bigint;
+  /** 用户 ID 。 */
+  user: bigint;
+  /** 荣誉卡槽数据。 */
+  credit: types.GuildCredit;
 }
 
 /**
@@ -399,5 +418,27 @@ export class Bot {
         user_id: user,
       },
     )));
+  }
+
+  /**
+   * 设置成员荣誉卡槽数据。
+   */
+  public async setGuildUserCredit({
+    guild,
+    chat,
+    user,
+    credit,
+  }: SetGuildUserCreditConfig): Promise<void> {
+    const data = analysis.guildCredit(credit);
+    await send(requester.put(
+      `${this.publicPath}/v2/guild/credit`,
+      {
+        guild_id: guild,
+        chat_id: chat,
+        user_id: user,
+        card_id: data.id,
+        credit: data.credit,
+      },
+    ));
   }
 }

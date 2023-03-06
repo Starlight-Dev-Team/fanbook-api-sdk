@@ -52,7 +52,7 @@ export interface SendMessageConfig {
    *
    * 仅 `isEphemeral` 为 `true` 时有效，为空时发给所有在线用户。
    */
-  sendTo?: bigint[];
+  target?: bigint[];
 }
 
 export interface KickUserConfig {
@@ -93,26 +93,35 @@ export class Bot {
 
   /**
    * 发送消息。
-   * @param config 配置项
+   * @param chat 配置项
    * @returns 消息 ID
    */
-  public async sendMessage(config: SendMessageConfig): Promise<bigint> {
-    const data = {
-      chat_id: config.chat,
-      text: config.text,
-      parse_mode: config.parseMode,
-      selective: config.isOnlyParticipantsCanRead,
-      reply_to_message_id: config.replyTo,
-      unreactive: config.isUnreactive ? 1 : 0,
-      desc: config.description,
-      ephemeral: config.isEphemeral,
-      // 如果 `isEphemeral` 为空，则不传入此项。
-      // 否则，此项默认为 `['all']`
-      users: config.isEphemeral ? (config.sendTo ?? ['all']) : undefined,
-    };
+  public async sendMessage({
+    chat,
+    text,
+    parseMode,
+    isOnlyParticipantsCanRead,
+    replyTo,
+    isUnreactive,
+    description,
+    isEphemeral,
+    target,
+  }: SendMessageConfig): Promise<bigint> {
     const res: native.Message = await send(requester.post(
       `${this.publicPath}/sendMessage`,
-      data,
+      {
+        chat_id: chat,
+        text,
+        parse_mode: parseMode,
+        selective: isOnlyParticipantsCanRead,
+        reply_to_message_id: replyTo,
+        unreactive: isUnreactive ? 1 : 0,
+        desc: description,
+        ephemeral: isEphemeral,
+        // 如果 `isEphemeral` 为空，则不传入此项。
+        // 否则，此项默认为 `['all']`
+        users: isEphemeral ? (target ?? ['all']) : undefined,
+      },
     ));
     return res.message_id;
   }

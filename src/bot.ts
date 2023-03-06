@@ -82,6 +82,14 @@ export interface GetPrivateChatConfig {
   /** 目标用户 ID 。 */
   target: bigint;
 }
+export interface BanUserSpeakingConfig {
+  /** 用户所在服务器 ID 。 */
+  guild: bigint;
+  /** 用户 ID 。 */
+  user: bigint;
+  /** 禁言分钟数。 */
+  duration: number;
+}
 export interface KickUserConfig {
   /**
    * 服务器 ID 。
@@ -283,15 +291,12 @@ export class Bot {
 
   /**
    * 禁言用户。
-   * @param guild 目标服务器 ID
-   * @param user 目标用户 ID
-   * @param duration 禁言时长（单位：秒）
    */
-  public async banUserSpeaking(
-    guild: bigint,
-    user: bigint,
-    duration: number,
-  ): Promise<void> {
+  public async banUserSpeaking({
+    guild,
+    user,
+    duration,
+  }: BanUserSpeakingConfig): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/forbidUserSpeaking`,
       {

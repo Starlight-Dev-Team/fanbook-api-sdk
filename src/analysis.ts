@@ -19,6 +19,7 @@ export function guildCredit(data: types.GuildCredit): {
         value,
       });
     }
+    slots.push(res);
   }
   return {
     id: data.id,

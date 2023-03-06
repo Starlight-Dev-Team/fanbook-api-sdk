@@ -433,11 +433,11 @@ export class Bot {
     await send(requester.put(
       `${this.publicPath}/v2/guild/credit`,
       {
-        guild_id: guild,
+        guild_id: guild?.toString(),
         chat_id: chat,
-        user_id: user,
+        user_id: user?.toString(),
         card_id: data.id,
-        credit: data.credit,
+        guild_credit: data.credit,
       },
     ));
   }

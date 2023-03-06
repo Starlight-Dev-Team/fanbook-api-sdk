@@ -11,7 +11,10 @@ const id = 995858; // 用户 Fanbook #
 const bot = new fanbook.Bot(token);
 
 async function main() {
-  const channels = await bot.getUserByShortId(BigInt(guild), id);
+  const channels = await bot.getUserByShortId({
+    guild: BigInt(guild),
+    id,
+  });
   console.log('用户 ID =', channels);
 }
 

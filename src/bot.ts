@@ -52,18 +52,79 @@ export interface SendMessageConfig {
    *
    * 仅 `isEphemeral` 为 `true` 时有效，为空时发给所有在线用户。
    */
-  sendTo?: bigint[];
+  target?: bigint[];
 }
-
+export interface DeleteMessageConfig {
+  /** 消息所在聊天。 */
+  chat: bigint;
+  /** 消息 ID 。 */
+  message: bigint;
+}
+export interface GetGuildChannelsConfig {
+  /** 服务器 ID 。 */
+  guild: bigint;
+}
+export interface GetChannelMembersConfig {
+  /** 频道所在服务器 ID 。 */
+  guild: bigint;
+  /** 频道 ID 。 */
+  channel: bigint;
+  /** 分页数据。 */
+  range: native.Range;
+}
+export interface GetUserByShortIdConfig {
+  /** 用户所在频道 ID 。 */
+  guild: bigint;
+  /** 用户的 Fanbook # 。 */
+  id: number;
+}
+export interface GetPrivateChatConfig {
+  /** 目标用户 ID 。 */
+  target: bigint;
+}
+export interface BanUserSpeakingConfig {
+  /** 用户所在服务器 ID 。 */
+  guild: bigint;
+  /** 用户 ID 。 */
+  user: bigint;
+  /** 禁言分钟数。 */
+  duration: number;
+}
 export interface KickUserConfig {
   /**
    * 服务器 ID 。
+   *
+   * `chat` 为空时必填。
    */
   guild?: bigint;
   /**
    * 聊天 ID 。
+   *
+   * `guild` 为空时必填。
    */
   chat?: bigint;
+  /** 目标用户。 */
+  user: bigint;
+}
+export interface GetGuildRolesConfig {
+  /** 服务器 ID 。 */
+  guild: bigint;
+}
+export interface SetGuildUserRolesConfig {
+  /** 服务器 ID 。 */
+  guild: bigint;
+  /** 目标用户 ID 。 */
+  user: bigint;
+  /** 需要添加或删除的角色 ID 。 */
+  roles: bigint[];
+  /** 操作类型，添加或删除。 */
+  operation: 'add' | 'del';
+}
+export interface GetGuildUserCreditConfig {
+  /** 服务器 ID 。 */
+  guild: bigint;
+  /** 用户 ID 。 */
+  user: bigint;
 }
 
 /**
@@ -93,26 +154,34 @@ export class Bot {
 
   /**
    * 发送消息。
-   * @param config 配置项
    * @returns 消息 ID
    */
-  public async sendMessage(config: SendMessageConfig): Promise<bigint> {
-    const data = {
-      chat_id: config.chat,
-      text: config.text,
-      parse_mode: config.parseMode,
-      selective: config.isOnlyParticipantsCanRead,
-      reply_to_message_id: config.replyTo,
-      unreactive: config.isUnreactive ? 1 : 0,
-      desc: config.description,
-      ephemeral: config.isEphemeral,
-      // 如果 `isEphemeral` 为空，则不传入此项。
-      // 否则，此项默认为 `['all']`
-      users: config.isEphemeral ? (config.sendTo ?? ['all']) : undefined,
-    };
+  public async sendMessage({
+    chat,
+    text,
+    parseMode,
+    isOnlyParticipantsCanRead,
+    replyTo,
+    isUnreactive,
+    description,
+    isEphemeral,
+    target,
+  }: SendMessageConfig): Promise<bigint> {
     const res: native.Message = await send(requester.post(
       `${this.publicPath}/sendMessage`,
-      data,
+      {
+        chat_id: chat,
+        text,
+        parse_mode: parseMode,
+        selective: isOnlyParticipantsCanRead,
+        reply_to_message_id: replyTo,
+        unreactive: isUnreactive ? 1 : 0,
+        desc: description,
+        ephemeral: isEphemeral,
+        // 如果 `isEphemeral` 为空，则不传入此项。
+        // 否则，此项默认为 `['all']`
+        users: isEphemeral ? (target ?? ['all']) : undefined,
+      },
     ));
     return res.message_id;
   }
@@ -123,10 +192,11 @@ export class Bot {
    * 机器人发送消息后，可在一定内撤回。
    *
    * 机器人有**对应频道**的“管理消息”权限时，可以撤回**任意消息**（特殊声明除外）。
-   * @param chat 聊天 ID
-   * @param message 消息 ID
    */
-  public async deleteMessage(chat: bigint, message: bigint): Promise<void> {
+  public async deleteMessage({
+    chat,
+    message,
+  }: DeleteMessageConfig): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/deleteMessage`,
       {
@@ -138,10 +208,11 @@ export class Bot {
 
   /**
    * 获取服务器中的频道列表。
-   * @param guild 服务器 ID
    * @returns 频道 ID
    */
-  public async getGuildChannels(guild: bigint): Promise<types.Chat[]> {
+  public async getGuildChannels({
+    guild,
+  }: GetGuildChannelsConfig): Promise<types.Chat[]> {
     const res: native.Channel[] = await send(requester.post(
       `${this.publicPath}/channel/list`,
       {
@@ -158,16 +229,13 @@ export class Bot {
 
   /**
    * 分页获取频道成员。
-   * @param guild 服务器 ID
-   * @param channel 频道 ID
-   * @param range 分页数据
    * @returns 获取到的频道成员
    */
-  public async getChannelMembers(
-    guild: bigint,
-    channel: bigint,
-    range: native.Range,
-  ): Promise<bigint[]> {
+  public async getChannelMembers({
+    guild,
+    channel,
+    range,
+  }: GetChannelMembersConfig): Promise<bigint[]> {
     const user = (await this.getProfile()).uuid;
     const res: {
       ops: Array<{
@@ -210,10 +278,12 @@ export class Bot {
 
   /**
    * 通过 Fanbook # 获取用户 ID 。
-   * @param id Fanbook #
    * @returns 用户 ID
    */
-  public async getUserByShortId(guild: bigint, id: number): Promise<bigint> {
+  public async getUserByShortId({
+    guild,
+    id,
+  }: GetUserByShortIdConfig): Promise<bigint> {
     const res: Array<{
       user: native.User;
       status: 'member';
@@ -228,28 +298,26 @@ export class Bot {
    * 获取与用户的私聊。
    *
    * 机器人需要与用户有共同服务器。
-   * @param user 用户 ID
    * @returns 聊天 ID
    */
-  public async getPrivateChat(user: bigint): Promise<bigint> {
+  public async getPrivateChat({
+    target,
+  }: GetPrivateChatConfig): Promise<bigint> {
     const res: native.Chat = await send(requester.post(
       `${this.publicPath}/getPrivateChat`,
-      { user_id: user },
+      { user_id: target },
     ));
     return res.id;
   }
 
   /**
    * 禁言用户。
-   * @param guild 目标服务器 ID
-   * @param user 目标用户 ID
-   * @param duration 禁言时长（单位：秒）
    */
-  public async banUserSpeaking(
-    guild: bigint,
-    user: bigint,
-    duration: number,
-  ): Promise<void> {
+  public async banUserSpeaking({
+    guild,
+    user,
+    duration,
+  }: BanUserSpeakingConfig): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/forbidUserSpeaking`,
       {
@@ -262,25 +330,28 @@ export class Bot {
 
   /**
    * 踢出用户。
-   * @param user 用户 ID
-   * @param config 配置操作所在服务器或频道
    */
-  public async kickUser(user: bigint, config: KickUserConfig): Promise<void> {
+  public async kickUser({
+    guild,
+    chat,
+    user,
+  }: KickUserConfig): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/kickChatMember`,
       {
         user_id: user,
-        chat_id: config.chat,
-        guild_id: config.guild,
+        chat_id: chat,
+        guild_id: guild,
       },
     ));
   }
 
   /**
    * 获取服务器角色列表。
-   * @param guild 服务器 ID
    */
-  public async getGuildRoles(guild: bigint): Promise<types.GuildRole[]> {
+  public async getGuildRoles({
+    guild,
+  }: GetGuildRolesConfig): Promise<types.GuildRole[]> {
     const res: native.GuildRole[] = await send(requester.post(
       `${this.publicPath}/getGuildRoles`,
       {
@@ -296,17 +367,13 @@ export class Bot {
 
   /**
    * 设置指定服务器成员的角色。
-   * @param guild 服务器 ID
-   * @param user 用户 ID
-   * @param roles 角色 ID 数组
-   * @param operation 是给用户添加（`add`）还是移除（`del`）角色，默认 `add`
    */
-  public async setGuildUserRoles(
-    guild: bigint,
-    user: bigint,
-    roles: bigint[],
-    operation: 'add' | 'del' = 'add',
-  ): Promise<void> {
+  public async setGuildUserRoles({
+    guild,
+    user,
+    roles,
+    operation,
+  }: SetGuildUserRolesConfig): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/v2/setMemberRoles`,
       {
@@ -321,10 +388,10 @@ export class Bot {
   /**
    * 获取成员荣誉卡槽数据。
    */
-  public async getGuildUserCredit(
-    guild: bigint,
-    user: bigint,
-  ): Promise<types.GuildCredit[]> {
+  public async getGuildUserCredit({
+    guild,
+    user,
+  }: GetGuildUserCreditConfig): Promise<types.GuildCredit[]> {
     return transform.guildCredit(await send(requester.post(
       `${this.publicPath}/getGuildCredit`,
       {

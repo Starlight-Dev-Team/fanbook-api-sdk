@@ -60,6 +60,10 @@ export interface DeleteMessageConfig {
   /** 消息 ID 。 */
   message: bigint;
 }
+export interface GetGuildChannelsConfig {
+  /** 服务器 ID 。 */
+  guild: bigint;
+}
 export interface KickUserConfig {
   /**
    * 服务器 ID 。
@@ -152,10 +156,11 @@ export class Bot {
 
   /**
    * 获取服务器中的频道列表。
-   * @param guild 服务器 ID
    * @returns 频道 ID
    */
-  public async getGuildChannels(guild: bigint): Promise<types.Chat[]> {
+  public async getGuildChannels({
+    guild,
+  }: GetGuildChannelsConfig): Promise<types.Chat[]> {
     const res: native.Channel[] = await send(requester.post(
       `${this.publicPath}/channel/list`,
       {

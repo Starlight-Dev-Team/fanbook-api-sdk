@@ -78,6 +78,10 @@ export interface GetUserByShortIdConfig {
   /** 用户的 Fanbook # 。 */
   id: number;
 }
+export interface GetPrivateChatConfig {
+  /** 目标用户 ID 。 */
+  target: bigint;
+}
 export interface KickUserConfig {
   /**
    * 服务器 ID 。
@@ -267,10 +271,12 @@ export class Bot {
    * @param user 用户 ID
    * @returns 聊天 ID
    */
-  public async getPrivateChat(user: bigint): Promise<bigint> {
+  public async getPrivateChat({
+    target,
+  }: GetPrivateChatConfig): Promise<bigint> {
     const res: native.Chat = await send(requester.post(
       `${this.publicPath}/getPrivateChat`,
-      { user_id: user },
+      { user_id: target },
     ));
     return res.id;
   }

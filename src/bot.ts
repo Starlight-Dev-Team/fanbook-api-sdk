@@ -110,6 +110,16 @@ export interface GetGuildRolesConfig {
   /** 服务器 ID 。 */
   guild: bigint;
 }
+export interface SetGuildUserRolesConfig {
+  /** 服务器 ID 。 */
+  guild: bigint;
+  /** 目标用户 ID 。 */
+  user: bigint;
+  /** 需要添加或删除的角色 ID 。 */
+  roles: bigint[];
+  /** 操作类型，添加或删除。 */
+  operation: 'add' | 'del';
+}
 
 /**
  * 开放平台机器人。
@@ -356,17 +366,13 @@ export class Bot {
 
   /**
    * 设置指定服务器成员的角色。
-   * @param guild 服务器 ID
-   * @param user 用户 ID
-   * @param roles 角色 ID 数组
-   * @param operation 是给用户添加（`add`）还是移除（`del`）角色，默认 `add`
    */
-  public async setGuildUserRoles(
-    guild: bigint,
-    user: bigint,
-    roles: bigint[],
-    operation: 'add' | 'del' = 'add',
-  ): Promise<void> {
+  public async setGuildUserRoles({
+    guild,
+    user,
+    roles,
+    operation,
+  }: SetGuildUserRolesConfig): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/v2/setMemberRoles`,
       {

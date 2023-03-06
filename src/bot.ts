@@ -325,8 +325,8 @@ export class Bot {
       `${this.publicPath}/kickChatMember`,
       {
         user_id: user,
-        chat_id: config.chat,
-        guild_id: config.guild,
+        chat_id: chat,
+        guild_id: guild,
       },
     ));
   }

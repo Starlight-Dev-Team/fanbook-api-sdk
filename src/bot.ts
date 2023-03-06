@@ -72,6 +72,12 @@ export interface GetChannelMembersConfig {
   /** 分页数据。 */
   range: native.Range;
 }
+export interface GetUserByShortIdConfig {
+  /** 用户所在频道 ID 。 */
+  guild: bigint;
+  /** 用户的 Fanbook # 。 */
+  id: number;
+}
 export interface KickUserConfig {
   /**
    * 服务器 ID 。
@@ -240,7 +246,10 @@ export class Bot {
    * @param id Fanbook #
    * @returns 用户 ID
    */
-  public async getUserByShortId(guild: bigint, id: number): Promise<bigint> {
+  public async getUserByShortId({
+    guild,
+    id,
+  }: GetUserByShortIdConfig): Promise<bigint> {
     const res: Array<{
       user: native.User;
       status: 'member';

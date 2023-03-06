@@ -229,9 +229,6 @@ export class Bot {
 
   /**
    * 分页获取频道成员。
-   * @param guild 服务器 ID
-   * @param channel 频道 ID
-   * @param range 分页数据
    * @returns 获取到的频道成员
    */
   public async getChannelMembers({
@@ -281,7 +278,6 @@ export class Bot {
 
   /**
    * 通过 Fanbook # 获取用户 ID 。
-   * @param id Fanbook #
    * @returns 用户 ID
    */
   public async getUserByShortId({
@@ -302,7 +298,6 @@ export class Bot {
    * 获取与用户的私聊。
    *
    * 机器人需要与用户有共同服务器。
-   * @param user 用户 ID
    * @returns 聊天 ID
    */
   public async getPrivateChat({

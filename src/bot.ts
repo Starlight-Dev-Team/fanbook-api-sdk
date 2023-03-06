@@ -93,12 +93,18 @@ export interface BanUserSpeakingConfig {
 export interface KickUserConfig {
   /**
    * 服务器 ID 。
+   *
+   * `chat` 为空时必填。
    */
   guild?: bigint;
   /**
    * 聊天 ID 。
+   *
+   * `guild` 为空时必填。
    */
   chat?: bigint;
+  /** 目标用户。 */
+  user: bigint;
 }
 
 /**
@@ -309,10 +315,12 @@ export class Bot {
 
   /**
    * 踢出用户。
-   * @param user 用户 ID
-   * @param config 配置操作所在服务器或频道
    */
-  public async kickUser(user: bigint, config: KickUserConfig): Promise<void> {
+  public async kickUser({
+    guild,
+    chat,
+    user,
+  }: KickUserConfig): Promise<void> {
     await send(requester.post(
       `${this.publicPath}/kickChatMember`,
       {

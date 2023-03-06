@@ -1,5 +1,15 @@
 # 更新日志
 
+## 0.5.0
+
+### ⚠️ 破坏性更改
+
+- **统一机器人方法参数风格。**([#49](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/49))
+
+### 新功能
+
+- 添加“设置卡槽（荣誉）数据”方法。([#50](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/50))
+
 ## 0.4.1
 
 ### 问题修复

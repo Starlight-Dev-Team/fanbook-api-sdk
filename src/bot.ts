@@ -64,6 +64,14 @@ export interface GetGuildChannelsConfig {
   /** 服务器 ID 。 */
   guild: bigint;
 }
+export interface GetChannelMembersConfig {
+  /** 频道所在服务器 ID 。 */
+  guild: bigint;
+  /** 频道 ID 。 */
+  channel: bigint;
+  /** 分页数据。 */
+  range: native.Range;
+}
 export interface KickUserConfig {
   /**
    * 服务器 ID 。
@@ -182,11 +190,11 @@ export class Bot {
    * @param range 分页数据
    * @returns 获取到的频道成员
    */
-  public async getChannelMembers(
-    guild: bigint,
-    channel: bigint,
-    range: native.Range,
-  ): Promise<bigint[]> {
+  public async getChannelMembers({
+    guild,
+    channel,
+    range,
+  }: GetChannelMembersConfig): Promise<bigint[]> {
     const user = (await this.getProfile()).uuid;
     const res: {
       ops: Array<{

@@ -10,8 +10,7 @@
     "dev": "sh ./scripts/dev.sh",
     "lint": "sh ./scripts/lint.sh",
     "build": "sh ./scripts/build.sh",
-    "preinstall": "sh ./scripts/pre-install.sh",
-    "postinstall": "sh ./scripts/post-install.sh"
+    "prepublish": "sh ./scripts/pre-publish.sh"
   },
   "homepage": "https://github.com/Starlight-Dev-Team/fanbook-api-sdk",
   "repository": {

@@ -145,6 +145,24 @@ export interface SetGuildUserCreditConfig {
   /** 荣誉卡槽数据。 */
   credit: types.GuildCredit;
 }
+export interface DeleteGuildUserCreditConfig {
+  /**
+   * 服务器 ID 。
+   *
+   * `chat` 为空时必填。
+   */
+  guild?: bigint;
+  /**
+   * 聊天 ID 。
+   *
+   * `guild` 为空时必填。
+   */
+  chat?: bigint;
+  /** 用户 ID 。 */
+  user: bigint;
+  /** 要删除的荣誉的自定义 ID 。 */
+  card: string;
+}
 
 /**
  * 开放平台机器人。
@@ -438,6 +456,28 @@ export class Bot {
         user_id: user?.toString(),
         card_id: data.id,
         guild_credit: data.credit,
+      },
+    ));
+  }
+
+  /**
+   * 删除成员荣誉卡槽数据。
+   */
+  public async deleteGuildUserCredit({
+    guild,
+    chat,
+    user,
+    card,
+  }: DeleteGuildUserCreditConfig): Promise<void> {
+    await send(requester.delete(
+      `${this.publicPath}/v2/guild/credit`,
+      {
+        data: {
+          guild_id: guild?.toString(),
+          chat_id: chat,
+          user_id: user.toString(),
+          card_id: card,
+        },
       },
     ));
   }

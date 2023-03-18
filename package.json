@@ -1,6 +1,6 @@
 {
   "name": "@starlight-dev-team/fanbook-api-sdk",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "fanbook OpenAPI SDK",
   "main": "dist/main.js",
   "author": "Starlight-Dev-Team",

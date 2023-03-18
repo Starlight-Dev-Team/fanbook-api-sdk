@@ -64,6 +64,8 @@ export interface DeleteMessageConfig {
 export interface GetGuildChannelsConfig {
   /** 服务器 ID 。 */
   guild: bigint;
+  /** 机器人信息。 */
+  profile?: types.Profile;
 }
 export interface GetChannelMembersConfig {
   /** 频道所在服务器 ID 。 */
@@ -249,12 +251,14 @@ export class Bot {
    */
   public async getGuildChannels({
     guild,
+    profile,
   }: GetGuildChannelsConfig): Promise<types.Chat[]> {
     const res: native.Channel[] = await send(requester.post(
       `${this.publicPath}/channel/list`,
       {
-        user_id: String((await this.getProfile()).uuid),
-        guild_id: String(guild),
+        // 如果给定了机器人信息，则使用给定的信息，否则获取当前机器人信息
+        user_id: (profile ?? await this.getProfile()).uuid.toString(),
+        guild_id: guild.toString(),
       },
     ));
     const res2: types.Chat[] = [];

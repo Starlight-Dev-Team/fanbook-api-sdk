@@ -1,5 +1,12 @@
 # 更新日志
 
+## 0.6.0
+
+### 新功能
+
+- 添加“删除卡槽（荣誉）数据”方法。([#52](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/52))
+- “分页获取频道成员列表”方法允许给定机器人信息。([#54](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/54))
+
 ## 0.5.0
 
 ### ⚠️ 破坏性更改

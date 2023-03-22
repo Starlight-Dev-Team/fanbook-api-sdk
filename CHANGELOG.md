@@ -1,5 +1,11 @@
 # 更新日志
 
+## 0.6.2
+
+### 问题修复
+
+- 修复 `GuildCredit` 转换失败的问题。([#57](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/57))
+
 ## 0.6.1
 
 ### 新功能

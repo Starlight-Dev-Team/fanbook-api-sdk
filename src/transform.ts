@@ -71,9 +71,10 @@ export type NativeGuildCredit = [{
 }];
 export function guildCredit(native: NativeGuildCredit): types.GuildCredit[] {
   const res: types.GuildCredit[] = [];
+  const data = native[0].credits;
   // 遍历卡槽数组
-  for (const id of Object.keys(native)) {
-    const item = native[0].credits[id];
+  for (const id of Object.keys(data)) {
+    const item = data[id];
     const content: native.GuildCredit = JSON.parse(item.content);
     // 修改每个插槽的 `img` 键为 `image`
     const slots: types.GuildCreditSlot[][] = [];

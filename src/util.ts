@@ -40,6 +40,12 @@ export const apiBaseUrl = 'https://a1.fanbook.mobi';
  */
 export const requester = axios.create({
   baseURL: apiBaseUrl,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': '*',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'true',
+  },
   timeout: 5000,
   // JSON 请求体
   transformRequest: [(data, headers) => {

@@ -1,5 +1,11 @@
 # 更新日志
 
+## 0.6.3
+
+### 问题修复
+
+- 修复跨域错误。([#59](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/59))
+
 ## 0.6.2
 
 ### 问题修复

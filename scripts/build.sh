@@ -1,4 +1,4 @@
-npm install -g tsc tsc-alias;
-rm -rf ./dist;
-tsc;
-tsc-alias;
+npm install -g tsc tsc-alias
+rm -rf ./dist
+tsc
+tsc-alias

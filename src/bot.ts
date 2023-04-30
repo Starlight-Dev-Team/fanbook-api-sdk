@@ -2,6 +2,8 @@
  * 定义开放平台机器人。
  */
 
+import * as WebSocket from 'ws';
+
 import { requester, send } from '@/util';
 import * as transform from '@/transform';
 import * as analysis from '@/analysis';
@@ -55,6 +57,28 @@ export interface SendMessageConfig {
    */
   target?: bigint[];
 }
+export interface SubscribeMessagesConfig {
+  /**
+   * 机器人资料。
+   * @default await this.getProfile()
+   */
+  profile?: types.Profile;
+  /**
+   * 收到消息后调用的回调。
+   * @param message 消息 ID
+   */
+  onMessage: (data: any) => any;
+  /** 连接中断后的回调。 */
+  onClose?: (event: WebSocket.CloseEvent) => any;
+  /** 发生错误后的回调。 */
+  onError?: (event: WebSocket.ErrorEvent) => any;
+}
+export interface SubscribeMessagesResponse {
+  /** 关闭连接。 */
+  close: (code?: number, reason?: string) => void;
+  /** 发送心跳包。 */
+  ping: () => void;
+}
 export interface DeleteMessageConfig {
   /** 消息所在聊天。 */
   chat: bigint;
@@ -76,7 +100,7 @@ export interface GetChannelMembersConfig {
   range: native.Range;
   /**
    * 机器人资料。
-   * @default await this.getMe()
+   * @default await this.getProfile()
    */
   profile?: types.Profile;
 }
@@ -228,6 +252,53 @@ export class Bot {
       },
     ));
     return res.message_id;
+  }
+
+  /**
+   * 订阅消息。
+   */
+  public subscribeMessages({
+    profile,
+    onMessage,
+    onClose,
+    onError,
+  }: SubscribeMessagesConfig): Promise<SubscribeMessagesResponse> {
+    const initProfile = async(): Promise<void> => {
+      if (!profile) profile = await this.getProfile();
+    };
+    return new Promise((resolve) => {
+      initProfile().then(() => {
+        const id = (profile as types.Profile).uuid.toString();
+        const token = (profile as types.Profile).userToken;
+        const properties = {
+          platform: 'bot',
+          version: '1.6.60',
+          channel: 'office',
+          device_id: `bot${token}`,
+          build_number: 1,
+        };
+        const url = `wss://gateway-bot.fanbook.mobi/websocket?id=${token}&dId=bot${id}&v=1.6.60&x-super-properties=${btoa(JSON.stringify(properties))}`;
+        const ws = new WebSocket(url);
+        ws.addEventListener('message', (ev) => {
+          const data = JSON.parse((ev.data as Buffer).toString('utf-8'));
+          if (data.action !== 'pong') onMessage(data);
+        });
+        if (onClose) ws.addEventListener('close', (ev) => onClose(ev));
+        if (onError) ws.addEventListener('error', (ev) => onError(ev));
+        const interval = setInterval(ping, 25 * 1000);
+        function ping(): void {
+          ws.send('{"type":"ping"}');
+        }
+        function close(code?: number, reason?: string): void {
+          clearInterval(interval);
+          ws.close(code, reason);
+        }
+        ws.addEventListener('open', () => resolve({
+          close,
+          ping,
+        }));
+      });
+    });
   }
 
   /**

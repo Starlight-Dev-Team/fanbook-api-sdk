@@ -74,6 +74,11 @@ export interface GetChannelMembersConfig {
   channel: bigint;
   /** 分页数据。 */
   range: native.Range;
+  /**
+   * 机器人资料。
+   * @default await this.getMe()
+   */
+  profile?: types.Profile;
 }
 export interface GetUserByShortIdConfig {
   /** 用户所在频道 ID 。 */
@@ -276,8 +281,9 @@ export class Bot {
     guild,
     channel,
     range,
+    profile,
   }: GetChannelMembersConfig): Promise<bigint[]> {
-    const user = (await this.getProfile()).uuid;
+    const user = (profile ?? await this.getProfile()).uuid;
     const res: {
       ops: Array<{
         range: [number, number];

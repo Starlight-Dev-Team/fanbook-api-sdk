@@ -34,6 +34,7 @@ export function user(native: native.User): types.Profile {
     id: Number.isNaN(username) ? undefined : username, // 机器人 username 是字符串
     privacyMode: native.can_read_all_group_messages,
     isPending: native.pending,
+    userToken: native.user_token,
   };
 }
 

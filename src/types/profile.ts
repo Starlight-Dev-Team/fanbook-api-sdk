@@ -30,6 +30,10 @@ export interface Profile {
    * 是否未完成入门仪式。
    */
   isPending?: boolean;
+  /**
+   * 作为用户身份的令牌。
+   */
+  userToken: string;
 }
 
 export default Profile;

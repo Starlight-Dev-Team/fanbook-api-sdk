@@ -46,6 +46,10 @@ export interface User {
    * 是否未完成入门仪式。
    */
   pending?: boolean;
+  /**
+   * 作为用户身份的令牌。
+   */
+  user_token: string;
 }
 
 export default User;

@@ -73,6 +73,7 @@ export class App {
       uuid: BigInt(res.user_id),
       id: Number(res.username),
       name: res.nickname,
+      userToken: '',
     };
   }
 }

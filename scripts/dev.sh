@@ -1,1 +1,1 @@
-ts-node -r tsconfig-paths/register ./src/main.ts --files;
+ts-node -r tsconfig-paths/register ./src/main.ts --files

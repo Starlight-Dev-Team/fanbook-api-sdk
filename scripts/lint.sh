@@ -1,3 +1,3 @@
-npm install -g eslint;
-yarn;
-eslint ./src;
+npm install -g eslint
+yarn
+eslint ./src

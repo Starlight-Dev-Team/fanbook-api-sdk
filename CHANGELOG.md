@@ -1,5 +1,13 @@
 # 更新日志
 
+## 0.7.0
+
+### 新功能
+
+- “分页获取频道成员列表”方法允许传入机器人信息。([#62](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/62))
+- 机器人资料中添加 `user token` 。([#63](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/63))
+- **添加“订阅消息”方法。**([#64](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/pull/64))
+
 ## 0.6.3
 
 ### 问题修复

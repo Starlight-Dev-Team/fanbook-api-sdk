@@ -15,9 +15,13 @@ jobs:
         with:
           key: node_modules
           path: node_modules
+      - name: 安装包管理器
+        run: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh -
+          pnpm setup
       - name: 运行测试命令
         run: |
-          yarn lint
+          pnpm lint
   Build:
     runs-on: ubuntu-latest
     steps:
@@ -27,6 +31,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: 安装包管理器
+        run: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh -
+          pnpm setup
       - name: 获取缓存
         uses: actions/cache@v3
         with:
@@ -34,4 +42,4 @@ jobs:
           path: node_modules
       - name: 运行构建命令
         run: |
-          yarn build
+          pnpm build

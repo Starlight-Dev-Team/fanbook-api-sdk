@@ -9,7 +9,8 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: 'standard-with-typescript',
+  plugins: ['@typescript-eslint/eslint-plugin'],
+  extends: 'plugin:@typescript-eslint/recommended',
   parserOptions: {
     project: ['./tsconfig.json'],
     ecmaVersion: 11,
@@ -25,6 +26,7 @@ module.exports = {
     '@typescript-eslint/naming-convention': [0],
     '@typescript-eslint/no-confusing-void-expression': [0],
     '@typescript-eslint/no-debugger': production ? [2] : [0],
+    '@typescript-eslint/no-explicit-any': [0],
     '@typescript-eslint/no-floating-promises': [0],
     '@typescript-eslint/promise-function-async': [0],
     '@typescript-eslint/quotes': [2, 'single'],

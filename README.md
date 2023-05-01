@@ -30,6 +30,12 @@ npm install @starlight-dev-team/fanbook-api-sdk
 yarn add @starlight-dev-team/fanbook-api-sdk
 ```
 
+## pnpm
+
+```bash
+pnpm add @starlight-dev-team/fanbook-api-sdk
+```
+
 # 如何使用
 
 ## 导入 SDK

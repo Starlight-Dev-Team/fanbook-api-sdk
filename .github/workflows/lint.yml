@@ -17,7 +17,7 @@ jobs:
           path: node_modules
       - name: 安装包管理器
         run: |
-          curl -fsSL https://get.pnpm.io/install.sh | sh -
+          curl -fsSL https://get.pnpm.io/install.sh | bash -
           pnpm setup
       - name: 运行测试命令
         run: |
@@ -33,7 +33,7 @@ jobs:
           node-version: 16
       - name: 安装包管理器
         run: |
-          curl -fsSL https://get.pnpm.io/install.sh | sh -
+          curl -fsSL https://get.pnpm.io/install.sh | bash -
           pnpm setup
       - name: 获取缓存
         uses: actions/cache@v3

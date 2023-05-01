@@ -67,7 +67,7 @@ export interface SubscribeMessagesConfig {
    * 收到消息后调用的回调。
    * @param message 消息 ID
    */
-  onMessage: (data: any) => any;
+  onMessage: (data: native.WsMessage) => any;
   /** 连接中断后的回调。 */
   onClose?: (event: WebSocket.CloseEvent) => any;
   /** 发生错误后的回调。 */
@@ -256,6 +256,7 @@ export class Bot {
 
   /**
    * 订阅消息。
+   * @returns 可执行的操作
    */
   public subscribeMessages({
     profile,
@@ -281,7 +282,7 @@ export class Bot {
         const ws = new WebSocket(url);
         ws.addEventListener('message', (ev) => {
           const data = JSON.parse((ev.data as Buffer).toString('utf-8'));
-          if (data.action !== 'pong') onMessage(data);
+          if (data.action === 'push') onMessage(data.data);
         });
         if (onClose) ws.addEventListener('close', (ev) => onClose(ev));
         if (onError) ws.addEventListener('error', (ev) => onError(ev));

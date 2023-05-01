@@ -1,4 +1,5 @@
-import type { User } from './user';
+import { ChannelType } from '@/interface/channel';
+import type { User } from '@/interface/user';
 
 /**
  * 用户
@@ -198,4 +199,45 @@ export interface Message {
    * 内联键盘。
    */
   reply_markup?: /* unresolved */ unknown;
+}
+
+/** WebSocket 推送的消息对象。 */
+export interface WsMessage {
+  /** 消息内容。 */
+  content: string;
+  /** 发送时间。 */
+  time: number;
+  /** 所在频道。 */
+  channel_id: string;
+  /** 发送者。 */
+  user_id: string;
+  /** 直接引用。 */
+  quote_l1: null;
+  /** 二级引用。 */
+  quote_l2: null;
+  /** 服务器 ID 。 */
+  guild_id: string;
+  /** 频道类型。 */
+  channel_type: ChannelType;
+  /** 消息状态。 */
+  status: number;
+  /** 去重 ID 。 */
+  nonce: string;
+  /** @deprecated 未定义 */
+  ctype: null;
+  /** 发送者信息。 */
+  author: {
+    /** 昵称。 */
+    nickname: string;
+    /** Fanbook # 。 */
+    username: string;
+    /** 头像图片地址。 */
+    avatar: string;
+    /** 头像 NFT 展图地址。 */
+    avatar_nft: string | null;
+    /** 是否机器人。 */
+    bot: boolean;
+  };
+  /** 消息简介。 */
+  desc: string;
 }

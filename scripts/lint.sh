@@ -1,3 +1,3 @@
 npm install -g eslint
-yarn
+pnpm install
 eslint ./src

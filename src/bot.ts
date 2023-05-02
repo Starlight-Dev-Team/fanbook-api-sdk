@@ -64,6 +64,11 @@ export interface SubscribeMessagesConfig {
    */
   profile?: types.Profile;
   /**
+   * 是否仅接收@了机器人的消息。
+   * @default false
+   */
+  onlyMentionedBot?: boolean;
+  /**
    * 收到消息后调用的回调。
    * @param message 消息 ID
    */
@@ -260,6 +265,7 @@ export class Bot {
    */
   public subscribeMessages({
     profile,
+    onlyMentionedBot,
     onMessage,
     onClose,
     onError,
@@ -282,7 +288,15 @@ export class Bot {
         const ws = new WebSocket(url);
         ws.addEventListener('message', (ev) => {
           const data = JSON.parse((ev.data as Buffer).toString('utf-8'));
-          if (data.action === 'push') onMessage(data.data);
+          if (data.action === 'push') {
+            const message = data.data as native.WsMessage;
+            if (onlyMentionedBot) { // 需要过滤未提及机器人的消息
+              if (!message.mentions?.filter((v) => v.user_id === id)) { // 没@到
+                return; // 过滤掉
+              }
+            }
+            onMessage(message);
+          }
         });
         if (onClose) ws.addEventListener('close', (ev) => onClose(ev));
         if (onError) ws.addEventListener('error', (ev) => onError(ev));

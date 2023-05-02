@@ -225,6 +225,13 @@ export interface WsMessage {
   nonce: string;
   /** @deprecated 未定义 */
   ctype: null;
+  /** 被@的用户。 */
+  mentions?: Array<{
+    /** 被@的用户昵称。 */
+    nickname: string;
+    /** 被@的用户 ID 。 */
+    user_id: string;
+  }>;
   /** 发送者信息。 */
   author: {
     /** 昵称。 */

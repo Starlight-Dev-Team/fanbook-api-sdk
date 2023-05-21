@@ -240,6 +240,7 @@ export class Bot {
     isEphemeral,
     target,
   }: SendMessageConfig): Promise<bigint> {
+    const users = target?.map((v) => v.toString());
     const res: native.Message = await send(requester.post(
       `${this.publicPath}/sendMessage`,
       {
@@ -253,7 +254,7 @@ export class Bot {
         ephemeral: isEphemeral,
         // 如果 `isEphemeral` 为空，则不传入此项。
         // 否则，此项默认为 `['all']`
-        users: isEphemeral ? (target ?? ['all']) : undefined,
+        users: isEphemeral ? (users ?? ['all']) : undefined,
       },
     ));
     return res.message_id;

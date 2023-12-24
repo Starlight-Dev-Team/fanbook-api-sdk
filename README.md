@@ -1,5 +1,8 @@
 # Fanbook API SDK
 
+> [!WARNING]
+> 本包不再活跃维护，查看 [#77](https://github.com/Starlight-Dev-Team/fanbook-api-sdk/discussions/77) 获取更多信息。
+
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" />
   <img src="https://shields.io/github/issues/Starlight-Dev-Team/fanbook-api-sdk?style=flat-square" />
